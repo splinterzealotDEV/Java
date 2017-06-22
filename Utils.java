@@ -16,6 +16,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 public class Utils {
 
+// esta función filtra los colores usando la función inRnge
+// devuelve una Mat binaria poniendo en blanco los colores que quedan dentro del umbral
 public Mat ColorReprocess(Mat image,double upper_tresh, double lower_tresh)
 {
     //vector escalar con los valores HSV del treshold bajo
