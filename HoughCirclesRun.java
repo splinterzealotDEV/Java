@@ -21,13 +21,18 @@ public class HoughCirclesRun {
             System.exit(-1);
         }
        Mat srchsv=new Mat();
+        //coverting source image to hsv
         Imgproc.cvtColor(src,srchsv,Imgproc.COLOR_BGR2HSV);
+        //filtering colors 
         Mat src_gray =new Utils().ColorReprocess(srchsv,30,27) ;
         //Imgproc.Canny(src_gray,src_gray,100.0,10.0);
 
         //Mat otra=new Utils().ColorReprocess(src,10,0);
         //Imgproc.cvtColor(otra, lb,Imgproc.COLOR_HSV2BGR);
         //Imgproc.cvtColor(src, src_gray,Imgproc.COLOR_BGR2GRAY);
+        
+        
+        //aplying blur to image
         Imgproc.GaussianBlur( src_gray, src_gray, new Size(9, 9), 2, 2 );
         Mat gray=new Mat();
 //        Imgproc.cvtColor(src_gray,gray,Imgproc.COLOR_BGR2GRAY);
@@ -35,22 +40,27 @@ public class HoughCirclesRun {
         double minDist = (double)src.rows()/8;
         // If unknown the min and max radius, put zero as default.
         int minRadius = 0, maxRadius = 15;
+        //hough circles
         Imgproc.HoughCircles(src_gray, circles, Imgproc.HOUGH_GRADIENT, 1.0, minDist, 100.0, 30.0, minRadius, maxRadius);
         for (int x = 0; x < circles.cols(); x++) {
             double[] c = circles.get(0, x);
             Point center = new Point(Math.round(c[0]), Math.round(c[1]));
             System.out.println(center.x);
+            //getting circle center X coordinate
             centro=center.x;
-            System.out.println(center.y);
+            //System.out.println(center.y);
             int radius = (int) Math.round(c[2]);
             // circle center
             Imgproc.circle(src_gray, center, 3, new Scalar(100,200,0), -1, 8, 0 );
             // circle outline
             Imgproc.circle(src_gray, center, radius, new Scalar(100,200,0), 3, 8, 0 );
         }
+        //converting Mat to buffered image to display it
         Image tmpImg = toBufferedImage(src_gray);
+        //displaying image
         //displayImage("Hough Circle Transform Demo", tmpImg);
-
+        
+        //getting image region
         if(centro>0&&centro<=80)
         {
             return 1;
@@ -81,6 +91,7 @@ public class HoughCirclesRun {
         }
 
     }
+    
     public Image toBufferedImage(Mat m) {
         int type = BufferedImage.TYPE_BYTE_GRAY;
         if ( m.channels() > 1 ) {
